@@ -17,20 +17,20 @@ namespace Cryptlex.Services
 
         public HttpResponseMessage CreateActivation(string postData)
         {
-            return PostAsync($"{_apiUrl}", postData).Result;
+            return Post($"{_apiUrl}", postData);
         }
 
         public HttpResponseMessage UpdateActivation(string activationId, string postData)
         {
-            return PatchAsync($"{_apiUrl}/{activationId}", postData).Result;
+            return Patch($"{_apiUrl}/{activationId}", postData);
         }
 
         public HttpResponseMessage DeleteActivation(string activationId)
         {
-            return DeleteAsync($"{_apiUrl}/{activationId}", null).Result;
+            return Delete($"{_apiUrl}/{activationId}", null);
         }
 
-        private async Task<HttpResponseMessage> PostAsync(string url, string data)
+        private HttpResponseMessage Post(string url, string data)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage
@@ -39,10 +39,10 @@ namespace Cryptlex.Services
                 RequestUri = new Uri(url)
             };
             request.Content = new StringContent(data, Encoding.UTF8, LexConstants.JsonContentType);
-            return await client.SendAsync(request);
+            return client.SendAsync(request).Result;
         }
 
-        private async Task<HttpResponseMessage> PatchAsync(string url, string data)
+        private HttpResponseMessage Patch(string url, string data)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage
@@ -51,11 +51,10 @@ namespace Cryptlex.Services
                 RequestUri = new Uri(url)
             };
             request.Content = new StringContent(data, Encoding.UTF8, LexConstants.JsonContentType);
-            return await client.SendAsync(request);
-            // var json = await response.Content.ReadAsStringAsync();
+            return client.SendAsync(request).Result;
         }
 
-        private async Task<HttpResponseMessage> DeleteAsync(string url, string data)
+        private HttpResponseMessage Delete(string url, string data)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage
@@ -63,7 +62,7 @@ namespace Cryptlex.Services
                 Method = HttpMethod.Delete,
                 RequestUri = new Uri(url)
             };
-            return await client.SendAsync(request);
+            return client.SendAsync(request).Result;
         }
     }
 }
